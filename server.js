@@ -2,23 +2,24 @@ const express = require("express");
 const path = require("path");
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
+
+const PORT = Number(process.env.PORT) || 3001;
 const HOST = "0.0.0.0";
 
 app.disable("x-powered-by");
-app.use(express.static(path.join(__dirname, "public")));
+
+// GitHub'daki ana klasörden dosyaları servis et
+app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
+// Hata durumunda
 app.use((req, res) => {
-  if (req.path.startsWith("/api/")) {
-    return res.status(404).json({ success: false, message: "API endpoint bulunamadı." });
-  }
-  res.status(404).send("Sayfa bulunamadı.");
+    res.status(404).send("Sayfa bulunamadı.");
 });
 
 app.listen(PORT, HOST, () => {
-  console.log(`İstanbul Soğutma çalışıyor: http://${HOST}:${PORT}`);
+    console.log(`İstanbul Soğutma çalışıyor: ${HOST}:${PORT}`);
 });
